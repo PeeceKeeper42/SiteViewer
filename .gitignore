@@ -1,3 +1,11 @@
+.build/
+_other/
+_distrib*/
+*~
+Thumbs.db*
+CMakeLists.txt.user*
+
+# ---> Qt
 # C++ objects and libs
 *.slo
 *.lo
@@ -52,3 +60,49 @@ compile_commands.json
 *creator.user*
 
 *_qmlcache.qrc
+
+# ---> C++
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Archives and packages
+*.deb
+installator/*.deb
+installator/*.gostsum
+installator/*.tar
+installator/*.gz
+
+# Documentation
+
+_doc/doxygen/html/*
+!_doc/doxygen/html/_external
