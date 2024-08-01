@@ -1,5 +1,7 @@
 #include <QtCore>
 
+#include "exampleLib.hpp"
+
 int main()
 {
     QVector<int> a; // Qt object
@@ -8,9 +10,15 @@ int main()
     {
         a.append(i);
         qDebug() << i;
+
+        qDebug() << exampleLib::add(i,i);
     }
 
     /* manipulate a here */
+
+    QSettings settings;
+
+    settings;
 
     return 0;
 }
