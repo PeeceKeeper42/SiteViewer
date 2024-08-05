@@ -1,6 +1,7 @@
 #include <QtCore>
 
 #include "exampleLib.hpp"
+#include "config.h"
 
 int main()
 {
@@ -18,7 +19,6 @@ int main()
 
     QSettings settings;
 
-    settings;
 
     return 0;
 }
