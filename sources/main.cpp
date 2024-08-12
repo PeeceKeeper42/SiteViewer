@@ -1,24 +1,33 @@
 #include <QtCore>
+#include <QCoreApplication>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QUrl>
+#include <QDebug>
 
-#include "exampleLib.hpp"
 #include "config.h"
 
-int main()
-{
-    QVector<int> a; // Qt object
+int main(int argc, char *argv[]) {
+    QCoreApplication a(argc, argv);
 
-    for (int i=0; i<10; i++)
-    {
-        a.append(i);
-        qDebug() << i;
+    QNetworkAccessManager manager;
 
-        qDebug() << exampleLib::add(i,i);
-    }
+    // Подключаем сигнал finished к лямбда-функции
+    QObject::connect(&manager, &QNetworkAccessManager::finished, [](QNetworkReply *reply) {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll(); // Читаем данные ответа
+            qDebug() << "Response data:" << responseData; // Выводим в консоль
+        } else {
+            qDebug() << "Error:" << reply->errorString(); // Выводим ошибку
+        }
+        reply->deleteLater(); // Освобождаем память
+        QCoreApplication::quit(); // Завершаем приложение
+    });
 
-    /* manipulate a here */
+    // Выполняем GET-запрос
+    QNetworkRequest request(QUrl("https://example.com/"));
+    manager.get(request);
 
-    QSettings settings;
-
-
-    return 0;
+    return a.exec();
 }
