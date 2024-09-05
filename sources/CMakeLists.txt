@@ -19,6 +19,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network)
 
 add_executable(${PROJECT_NAME}
     main.cpp
+    logger.h
+    logger.cpp
+    tgBot/tgBot.h
+    tgBot/tgBot.cpp
     )
 
 target_link_directories(${PROJECT_NAME}
