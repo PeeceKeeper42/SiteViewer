@@ -1,9 +1,9 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 //==============================================================================
-#include <QObject>
 #include <QCoreApplication>
-#include <QSettings>
+#include <QObject>
+#include <QMutex>
 #include <QDir>
 
 
@@ -19,10 +19,22 @@ public:
 
     ~Logger();
 
-    static Logger *GetInstance(const QString& filePath, QObject *parent = nullptr);
+    static Logger* getInstance(const QString &filePath, QObject *parent = nullptr);
 
 private:
-    QFile* _logFile;
+    Logger(const QString &filePath);
+    Logger *_instance {nullptr};
+    QMutex mutex;
+
+    /*!
+     * \brief _logFile
+     *
+     * \todo v1.1 - Remake to several files
+     * \todo v1.2 - Implement write destination class (console,file,server),
+     * add functionality to add/remove destinations,
+     * add features to implement own destinations
+     */
+    QFile* _logFile {nullptr};
     QString _filePath;
 
     const QString _defaultLogFilePath { QCoreApplication::applicationDirPath()
