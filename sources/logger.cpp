@@ -3,45 +3,71 @@
 #include <QMutexLocker>
 
 //==============================================================================
-Logger::Logger(QString& filePath)
-    : _filePath(filePath)
+Logger::Logger()
 {
-    _logFile = new QFile(_filePath);
-    if(!_logFile->open(QIODevice::Append | QIODevice::Text))
-    {
-        qWarning() << tr("Can't open log file: %1").arg(_filePath);
+    _logFile = new QFile();
+}
+//==============================================================================
+//Logger::Logger()
+//{
+//    _logFile = new QFile(_filePath);
+//    if(!_logFile->open(QIODevice::Append | QIODevice::Text))
+//    {
+//        qWarning() << tr("Can't open log file: %1").arg(_filePath);
 
+//        _logFile->deleteLater();
+//        _logFile = nullptr;
+//    }
+//}
+//==============================================================================
+Logger::~Logger()
+{
+    if(_logFile)
+    {
+        _logFile->close();
         _logFile->deleteLater();
         _logFile = nullptr;
     }
 }
 //==============================================================================
-Logger::~Logger()
-{
-
-}
-//==============================================================================
-bool Logger::setLogFilePath(const QString &path)
-{
-    return false;
-}
-//==============================================================================
-QString Logger::logFilePath()
-{
-    return _filePath;
-}
-//==============================================================================
-Logger Logger::getInstance(QString& filePath,QObject *parent)
+Logger Logger::getInstance()
 {
     QMutexLocker locker(&mutex);
 
-    if(_instance) { return _instance; }
+    if(!_instance)
+    {
+        _instance = new Logger();
+    }
 
-    _instance = new Logger(filePath);
-
+    return _instance;
 }
 //==============================================================================
+bool Logger::openFile(QString &fileName)
+{
+    if(_logFile)
+    {
+        qWarning(tr("Found not closed file! File name: %1").arg(_logFile->fileName()));
 
+        _logFile->close();
+        _logFile->deleteLater();
+        _logFile = nullptr; //unnecessary, but i feel safer with with
+    }
+
+    _logFile = new QFile(fileName);
+    if(!_logFile->open(QIODevice::Append | QIODevice::Text))
+    {
+        qWarning() << tr("Can't open file! File name: %1").arg(fileName);
+
+        _logFile->deleteLater();
+        _logFile = nullptr;
+        return;
+    }
+}
+//==============================================================================
+bool Logger::isLogFileOpen()
+{
+    return(_logFile);//return(_logFile && _methodWriteTestString);
+}
 //==============================================================================
 
 //==============================================================================

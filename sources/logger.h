@@ -12,19 +12,19 @@ class Logger : public QObject
 {
     Q_OBJECT
 public:
-    //explicit Logger(QObject *parent = nullptr);
-    Logger() = 0;
     Logger(Logger &other) = 0;
+    Logger(Logger &&other) = 0;
     void operator=(const Logger &) = 0;
-
     ~Logger();
 
-    static Logger* getInstance(const QString &filePath, QObject *parent = nullptr);
+    bool isLogFileOpen();
+    static Logger* getInstance();
 
 private:
-    Logger(const QString &filePath);
-    Logger *_instance {nullptr};
-    QMutex mutex;
+    static Logger *_instance {nullptr};
+    static QMutex mutex;
+    Logger();
+
 
     /*!
      * \brief _logFile
