@@ -1,24 +1,13 @@
 #include "logger.h"
 
 #include <QMutexLocker>
+#include <QDebug>
 
 //==============================================================================
 Logger::Logger()
 {
     _logFile = new QFile();
 }
-//==============================================================================
-//Logger::Logger()
-//{
-//    _logFile = new QFile(_filePath);
-//    if(!_logFile->open(QIODevice::Append | QIODevice::Text))
-//    {
-//        qWarning() << tr("Can't open log file: %1").arg(_filePath);
-
-//        _logFile->deleteLater();
-//        _logFile = nullptr;
-//    }
-//}
 //==============================================================================
 Logger::~Logger()
 {
@@ -30,23 +19,24 @@ Logger::~Logger()
     }
 }
 //==============================================================================
-Logger Logger::getInstance()
+Logger &Logger::getInstance()
 {
-    QMutexLocker locker(&mutex);
+    /*
+        C++11 guarantee thread safe realisation
 
-    if(!_instance)
-    {
-        _instance = new Logger();
-    }
+        §6.7 [stmt.dcl] p4 If control enters the declaration concurrently while the variable is being initialized,
+        the concurrent execution shall wait for completion of the initialization.
+    */
+    static Logger instance;
 
-    return _instance;
+    return instance;
 }
 //==============================================================================
 bool Logger::openFile(QString &fileName)
 {
     if(_logFile)
     {
-        qWarning(tr("Found not closed file! File name: %1").arg(_logFile->fileName()));
+        qWarning() << tr("Found not closed file! File name: %1").arg(_logFile->fileName());
 
         _logFile->close();
         _logFile->deleteLater();
@@ -60,16 +50,18 @@ bool Logger::openFile(QString &fileName)
 
         _logFile->deleteLater();
         _logFile = nullptr;
-        return;
+        return false;
     }
-}
-//==============================================================================
-bool Logger::isLogFileOpen()
-{
-    return(_logFile);//return(_logFile && _methodWriteTestString);
-}
-//==============================================================================
 
+    return true;
+}
+//==============================================================================
+bool Logger::isOpen()
+{
+    return(_logFile && _logFile->isOpen());
+}
+//==============================================================================
+//bool Logger::Log
 //==============================================================================
 
 //==============================================================================

@@ -7,6 +7,7 @@
 #include <QDebug>
 
 #include "config.h"
+#include "logger.h"
 //==============================================================================
 int main(int argc, char *argv[]) {
     QCoreApplication a(argc, argv);
@@ -34,6 +35,9 @@ int main(int argc, char *argv[]) {
     qDebug() << GIT_AUTHOR_LINK;
     qDebug() << GIT_PROJECT_LINK;
     qDebug() << BUILD_DATE;
+
+    Logger::getInstance();
+
 
     return a.exec();
 }
