@@ -19,7 +19,7 @@ Logger::~Logger()
     }
 }
 //==============================================================================
-Logger &Logger::getInstance()
+Logger* Logger::getInstance()
 {
     /*
         C++11 guarantee thread safe realisation
@@ -28,8 +28,7 @@ Logger &Logger::getInstance()
         the concurrent execution shall wait for completion of the initialization.
     */
     static Logger instance;
-
-    return instance;
+    return &instance;
 }
 //==============================================================================
 bool Logger::openFile(QString &fileName)

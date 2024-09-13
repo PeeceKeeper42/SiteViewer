@@ -26,7 +26,7 @@ public:
     void operator=(const Logger &) = delete;
     ~Logger();
 
-    static Logger &getInstance();
+    static Logger* getInstance();
     bool openFile(QString &fileName);
     bool isOpen();
 
